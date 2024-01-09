@@ -1,3 +1,4 @@
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Chat, Message
 from django.contrib.auth import authenticate, login
