@@ -5,6 +5,8 @@
       <excludeFolder url="file://$MODULE_DIR$/django_chat_app/chat" />
       <excludeFolder url="file://$MODULE_DIR$/django_chat_app/django_chat_app" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/django_chat_app/static" />
+      <excludeFolder url="file://$MODULE_DIR$/django_chat_app/templates" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
