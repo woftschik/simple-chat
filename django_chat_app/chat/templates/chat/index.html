@@ -3,17 +3,54 @@
 
       {% if request.user.is_authenticated %}
 
+<div id="messageContainer">
       {% for message in messages %}
       <div>
         <span class="color-gray"> [{{ message.created_at }}] </span> {{ message.author.first_name }}: <i> {{ message.text }} </i>
       </div>
       {% endfor %}
+</div>
 
-      <form action="/chat/" method="post">
+
+
+<script>
+    async function sendMessage() {
+        let fd = new FormData();
+        let token = '{{ csrf_token }}'
+        fd.append('textmessage', messageField.value);
+        fd.append('csrfmiddlewaretoken', token);
+
+        try {
+            messageContainer.innerHTML += `
+                <div id="deleteMessage">
+                    <span class="color-gray">[DATUM]</span> MEIN NAME: {{ request.user.username }} <i class="color-gray"> ${messageField.value} </i>
+                </div>`;
+
+            let response = await fetch('/chat/', {
+                method: 'POST',
+                body: fd
+            });
+            let json = await response.json();
+            console.log(json);
+
+            document.getElementById('deleteMessage').remove();
+
+            messageContainer.innerHTML += `
+                <div>
+                    <span class="color-gray">`${json.created_at}`</span> MEIN NAME: {{ request.user.username }} <i> ${json.text} </i>
+                </div>`;
+
+        } catch(e){
+            console.error('An error occured', e);
+        }
+    }
+</script>
+
+      <form onsubmit="sendMessage(); return false;" method="post">
         {% csrf_token %}
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" name="textmessage" type="text" id="sample3">
-          <label class="mdl-textfield__label" for="sample3">Text...</label>
+          <input class="mdl-textfield__input" name="textmessage" type="text" id="messageField">
+          <label class="mdl-textfield__label" for="messageField">Text...</label>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">SEND</button>
       </form>
@@ -21,7 +58,7 @@
       {% else %}
       <h1>Nicht eingeloggt</h1>
       <p>
-        Please log-in!.<br> here <a href="/login/">loggin</a>
+        Please login!.<br> here <a href="/login/">loggin</a>
       </p>
       {% endif %}
 {% endblock %}
